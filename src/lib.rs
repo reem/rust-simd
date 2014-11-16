@@ -1,5 +1,3 @@
-#![crate_id = "simd"]
-
 #![feature(macro_rules, globs)]
 #![allow(experimental, dead_code)]
 
@@ -20,6 +18,7 @@ pub trait Vector {
 }
 
 impl VectorPlain {
+    #[inline]
     fn new(x: f64, y: f64) -> VectorPlain {
         VectorPlain {
             x: x,
@@ -29,17 +28,20 @@ impl VectorPlain {
 }
 
 impl Vector for VectorPlain {
+    #[inline]
     fn shift(&mut self, other: &VectorPlain) {
         self.x += other.x;
         self.y += other.y;
     }
 
+    #[inline]
     fn as_tuple(&self) -> (f64, f64) {
         (self.x, self.y)
     }
 }
 
 impl VectorSimd {
+    #[inline]
     fn new(x: f64, y: f64) -> VectorSimd {
         VectorSimd {
             inner: f64x2(x, y)
@@ -48,10 +50,12 @@ impl VectorSimd {
 }
 
 impl Vector for VectorSimd {
+    #[inline]
     fn shift(&mut self, other: &VectorSimd) {
         self.inner += other.inner;
     }
 
+    #[inline]
     fn as_tuple(&self) -> (f64, f64) {
         let f64x2(x, y) = self.inner;
         (x, y)
@@ -83,8 +87,11 @@ mod test {
             #[bench]
             fn $name(b: &mut Bencher) {
                 b.iter(|| {
-                    for _ in range(0, 100) {
-                        test::black_box($vec_type::new(10.0, 20.0).shift(&$vec_type::new(20.0, 30.0)));
+                    for _ in range(0u, 100) {
+                        test::black_box(
+                            $vec_type::new(10.0, 20.0)
+                                .shift(&$vec_type::new(20.0, 30.0))
+                        );
                     }
                 });
             }
