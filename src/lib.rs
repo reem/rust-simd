@@ -19,7 +19,7 @@ pub trait Vector {
 
 impl VectorPlain {
     #[inline]
-    fn new(x: f64, y: f64) -> VectorPlain {
+    pub fn new(x: f64, y: f64) -> VectorPlain {
         VectorPlain {
             x: x,
             y: y
@@ -42,7 +42,7 @@ impl Vector for VectorPlain {
 
 impl VectorSimd {
     #[inline]
-    fn new(x: f64, y: f64) -> VectorSimd {
+    pub fn new(x: f64, y: f64) -> VectorSimd {
         VectorSimd {
             inner: f64x2(x, y)
         }
@@ -98,9 +98,9 @@ mod test {
         }
     }
 
-    test_vector_add!(test_add_plain, VectorPlain)
-    test_vector_add!(test_add_simd, VectorSimd)
+    test_vector_add! { test_add_plain, VectorPlain }
+    test_vector_add! { test_add_simd, VectorSimd }
 
-    bench_vector_add!(bench_add_plain, VectorPlain)
-    bench_vector_add!(bench_add_simd, VectorSimd)
+    bench_vector_add! { bench_add_plain, VectorPlain }
+    bench_vector_add! { bench_add_simd, VectorSimd }
 }
