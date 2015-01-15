@@ -1,13 +1,14 @@
-#![feature(macro_rules, globs)]
-#![allow(experimental, dead_code)]
+#![allow(unstable)]
 
 use std::simd::f64x2;
 
+#[derive(Copy)]
 pub struct VectorPlain {
     x: f64,
     y: f64
 }
 
+#[derive(Copy)]
 pub struct VectorSimd {
     inner: f64x2
 }
@@ -87,7 +88,7 @@ mod test {
             #[bench]
             fn $name(b: &mut Bencher) {
                 b.iter(|| {
-                    for _ in range(0u, 100) {
+                    for _ in 0..100 {
                         test::black_box(
                             $vec_type::new(10.0, 20.0)
                                 .shift(&$vec_type::new(20.0, 30.0))
